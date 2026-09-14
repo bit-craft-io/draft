@@ -17,15 +17,26 @@ endef
 .PHONY: laravel-init
 laravel-init:
 	$(call print_headline,${@})
+	@$(MAKE) env-setup
 	@$(MAKE) composer install
 	@$(MAKE) laravel-reset
 	@$(MAKE) laravel-clean
 
+.PHONY: env-setup
+env-setup:
+	$(call print_headline,${@})
+	@if [ ! -f .env ]; then \
+		cp .env.local .env; \
+		echo ".env.local から .env を作成しました"; \
+	else \
+		echo ".env は既に存在するためスキップしました"; \
+	fi
+
 .PHONY: laravel-clean
 laravel-clean:
 	$(call print_headline,${@})
-	chown -R 1000:1000 /var/www/source
-	chmod -R 755 /var/www/source
+	chown -R 1000:1000 storage bootstrap/cache
+	chmod -R 755 storage bootstrap/cache
 	rm -rf storage/framework/cache/*
 
 	@$(MAKE) artisan config:clear
