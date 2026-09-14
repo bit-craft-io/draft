@@ -17,15 +17,26 @@ endef
 .PHONY: laravel-init
 laravel-init:
 	$(call print_headline,${@})
+	@$(MAKE) env-setup
 	@$(MAKE) composer install
 	@$(MAKE) laravel-reset
 	@$(MAKE) laravel-clean
 
+.PHONY: env-setup
+env-setup:
+	$(call print_headline,${@})
+	@if [ ! -f .env ]; then \
+		cp .env.local .env; \
+		echo ".env.local から .env を作成しました"; \
+	else \
+		echo ".env は既に存在するためスキップしました"; \
+	fi
+
 .PHONY: laravel-clean
 laravel-clean:
 	$(call print_headline,${@})
-	chown -R 1000:1000 /var/www/source
-	chmod -R 755 /var/www/source
+	chown -R 1000:1000 storage bootstrap/cache
+	chmod -R 755 storage bootstrap/cache
 	rm -rf storage/framework/cache/*
 
 	@$(MAKE) artisan config:clear
@@ -52,10 +63,6 @@ composer:
 	$(call print_headline,${@})
 	composer $(COMPOSER_ARGS)
 
-# 必須のおなじない
-%:
-	@:
-
 # ========================================
 # artisan
 # ----------------------------------------
@@ -65,10 +72,6 @@ ARTISAN_ARGS := $(filter-out artisan,$(MAKECMDGOALS))
 artisan:
 	$(call print_headline,${@})
 	php artisan $(ARTISAN_ARGS)
-
-# 必須のおなじない
-%:
-	@:
 
 # ========================================
 # php-cs-fixer
@@ -188,10 +191,6 @@ migrate-fresh:
 	$(call print_headline,${@})
 	DB_DATABASE=$(DB_NAME_ARGS) php artisan migrate:fresh
 
-# 必須のおなじない
-%:
-	@:
-
 # ========================================
 # migrate:reset
 # ----------------------------------------
@@ -210,3 +209,9 @@ job-restart:
 job-work:
 	$(call print_headline,${@})
 	php artisan queue:work
+
+# 必須のおまじない
+#%:
+#	@:
+.DEFAULT:
+	@echo "--- [WARN] target '$@' unknown ---"

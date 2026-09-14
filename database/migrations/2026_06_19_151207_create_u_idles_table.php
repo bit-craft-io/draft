@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('u_idles', function (Blueprint $table) {
-            $table->unsignedBigInteger('id')->autoIncrement()->comment('識別子');
+            $table->id()->comment('識別子');
             $table->unsignedBigInteger('user_id')->default(1)->comment('内部用ユーザ識別子');
             $table->unsignedSmallInteger('type_idle')->default(1)->comment('放置タイプ（1: energy | 2: craft）');
             $table->unsignedSmallInteger('index_no')->default(1)->comment('放置タイプ毎のインデックス番号');

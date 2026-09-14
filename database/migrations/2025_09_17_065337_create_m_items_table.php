@@ -15,7 +15,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('m_items', function (Blueprint $table) {
-            $table->unsignedBigInteger('id')->autoIncrement()->comment('識別子');
+            $table->id()->comment('識別子');
             $table->boolean('is_active')->default(false)->comment('公開中');
             $table->timestamp('begin_at')->nullable()->comment('有効期間（開始日時）');
             $table->timestamp('end_at')->nullable()->comment('有効期間（終了日時）');

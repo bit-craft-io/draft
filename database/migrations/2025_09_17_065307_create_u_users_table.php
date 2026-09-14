@@ -18,9 +18,10 @@ return new class extends Migration
             $table->string('public_id', 12)->unique()->comment('外部公開用ユーザ識別子');
             $table->string('nick_name', 64)->nullable()->comment('渾名');
             $table->unsignedBigInteger('icon_id')->default(1)->comment('アイコン識別子');
-            $table->unsignedSmallInteger('energy')->default(1)->comment('エナジー最大値');
+            # @note エナジー現在値 / エナジー自動回復最大 / エナジー所持最大 = 200 / 200 / 999
+            $table->unsignedSmallInteger('energy')->default(1)->comment('エナジー現在値');
             $table->unsignedSmallInteger('energy_max_regen')->default(1)->comment('エナジー最大値（自動回復）');
-            $table->unsignedSmallInteger('energy_max_stock')->default(1)->comment('エナジー最大値');
+            $table->unsignedSmallInteger('energy_max_stock')->default(1)->comment('エナジー最大値（所持）');
             $table->json('meta_data')->nullable()->default(new Expression('(JSON_OBJECT())'))->comment('クライアント自由保存領域');
             $table->timestamps();
 
