@@ -2,13 +2,15 @@
 
 export
 XDEBUG_MODE=off
-#MAKEFLAGS += --no-print-directory
+MAKEFLAGS += --no-print-directory
 
 ifneq ($(origin NAME),command line)
 NAME := app
 endif
 
 DOCKER_EXEC := docker-compose exec -u 1000:1000 -w /var/www/source -it $(NAME)
+
+SHELL := /bin/bash
 
 # ========================================
 # common
@@ -18,6 +20,39 @@ define print_headline
 	@echo ">>> 実行中: [ $(1) ]"
 	@echo "----------------------------------------------------------------"
 endef
+
+# ========================================
+# menu
+# ----------------------------------------
+.DEFAULT_GOAL := menu
+
+MENU_TARGETS := _exit docker-env docker-up docker-down docker-login docker-reset app-init
+
+.PHONY: menu
+menu:
+	@trap 'echo; exit 0' INT; \
+	i=1; \
+	for name in $(MENU_TARGETS); do \
+		printf " %d) %s\n" $$i $$name; \
+		i=$$((i+1)); \
+	done; \
+	printf "No? "; \
+	num=""; \
+	while IFS= read -rsn1 char; do \
+		if [ -z "$$char" ]; then \
+			break; \
+		elif [[ "$$char" =~ [0-9] ]]; then \
+			num="$$num$$char"; \
+			printf '%s' "$$char"; \
+		fi; \
+	done; \
+	echo; \
+	if [ -z "$$num" ]; then t=""; else t=$$(echo $(MENU_TARGETS) | cut -d' ' -f"$$num"); fi; \
+	case "$$t" in \
+		_exit) echo "" ;; \
+		"") echo "" ;; \
+		*) $(MAKE) $$t ;; \
+	esac
 
 # ========================================
 # docker
