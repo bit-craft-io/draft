@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>laravel.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> or <div class="page"></div> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+<link rel="stylesheet" href="" type="text/css">
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<link rel="stylesheet" href="laravel.css">
+<div class="doc-title">
+  <div class="doc-title__eyebrow">DEVELOPER GUIDE</div>
+  <h1>Laravel 実装ガイド</h1>
+  <div class="doc-title__meta">bc.draft &middot; Laravel 12 / PHP 8.4</div>
+</div>
+<div class="doc-toc-print">
+<p><strong>目次</strong></p>
+<p><a href="#overview">概要</a> / <a href="#directory">ディレクトリ構成</a> / <a href="#flow">リクエスト〜レスポンスの流れ</a> / <a href="#layers">レイヤー別の役割</a> / <a href="#hub">Hub パターン</a> / <a href="#howto">新機能を実装する手順</a> / <a href="#naming">命名規則</a> / <a href="#exception">例外・エラーハンドリング</a> / <a href="#stack">使用技術</a> / <a href="#reference">参考資料</a></p>
+</div>
+<div class="doc-layout">
+<nav class="doc-nav">
+<p><strong>目次</strong></p>
+<ul>
+<li><a href="#overview">概要</a></li>
+<li><a href="#directory">ディレクトリ構成</a></li>
+<li><a href="#flow">リクエスト〜レスポンスの流れ</a></li>
+<li><a href="#layers">レイヤー別の役割</a></li>
+<li><a href="#hub">Hub パターン（サービスロケータ）</a></li>
+<li><a href="#howto">新機能を実装する手順</a></li>
+<li><a href="#naming">命名規則</a></li>
+<li><a href="#exception">例外・エラーハンドリング</a></li>
+<li><a href="#stack">使用技術</a></li>
+<li><a href="#reference">参考資料</a></li>
+</ul>
+</nav>
+<div class="doc-content">
+<p><a id="overview"></a></p>
+<h2 id="概要">概要</h2>
+<p>本ドキュメントは、本プロジェクト（Laravel 12 / PHP 8.4）における実装方法をまとめたものです。<br />
+設計思想（DDD・責務分離）については <a href="../../ddd/src/overview.md">docs/ddd/src/overview.md</a> を参照してください。<br />
+こちらでは実際のディレクトリ構成・命名規則・実装手順など、<strong>手を動かすための具体的な情報</strong>を中心にまとめます。</p>
+<hr>
+<p><a id="directory"></a></p>
+<h2 id="ディレクトリ構成">ディレクトリ構成</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">パス</th>
+<th style="text-align:left">種別</th>
+<th style="text-align:left">役割</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">app/</td>
+<td style="text-align:left">ディレクトリ</td>
+<td style="text-align:left">アプリケーションコードのルート</td>
+</tr>
+<tr>
+<td style="text-align:left">├─ Core/</td>
+<td style="text-align:left">ディレクトリ</td>
+<td style="text-align:left">フレームワークに依存する共通基盤（原則アプリ固有ロジックを持たない）</td>
+</tr>
+<tr>
+<td style="text-align:left">│　├─ Http/</td>
+<td style="text-align:left">ディレクトリ</td>
+<td style="text-align:left">HTTP層の共通基盤</td>
+</tr>
+<tr>
+<td style="text-align:left">│　│　├─ Controllers/BaseCnt.php</td>
+<td style="text-align:left">ファイル</td>
+<td style="text-align:left">Controller 基底クラス</td>
+</tr>
+<tr>
+<td style="text-align:left">│　│　├─ Applications/BaseApp.php</td>
+<td style="text-align:left">ファイル</td>
+<td style="text-align:left">Application 基底クラス</td>
+</tr>
+<tr>
+<td style="text-align:left">│　│　├─ Middlewares/</td>
+<td style="text-align:left">ディレクトリ</td>
+<td style="text-align:left">Mdl*.php（Transaction / Response 制御など）</td>
+</tr>
+<tr>
+<td style="text-align:left">│　│　├─ Requests/BaseReq.php, ReqNone.php</td>
+<td style="text-align:left">ファイル</td>
+<td style="text-align:left">FormRequest 基底クラス</td>
+</tr>
+<tr>
+<td style="text-align:left">│　│　└─ Responses/BaseRes.php, ResSuccess.php, ResFailed.php</td>
+<td style="text-align:left">ファイル</td>
+<td style="text-align:left">Response 基底クラス</td>
+</tr>
+<tr>
+<td style="text-align:left">│　├─ Domains/</td>
+<td style="text-align:left">ディレクトリ</td>
+<td style="text-align:left">ドメイン層の共通基盤</td>
+</tr>
+<tr>
+<td style="text-align:left">│　│　├─ Entity/BaseEnt.php</td>
+<td style="text-align:left">ファイル</td>
+<td style="text-align:left">Entity 基底クラス</td>
+</tr>
+<tr>
+<td style="text-align:left">│　│　├─ Repository/BaseRep.php</td>
+<td style="text-align:left">ファイル</td>
+<td style="text-align:left">Repository 基底クラス</td>
+</tr>
+<tr>
+<td style="text-align:left">│　│　├─ ValueObject/BaseVo.php, BaseMstVo.php</td>
+<td style="text-align:left">ファイル</td>
+<td style="text-align:left">ValueObject 基底クラス</td>
+</tr>
+<tr>
+<td style="text-align:left">│　│　└─ ValueProxy/BaseVp.php</td>
+<td style="text-align:left">ファイル</td>
+<td style="text-align:left">ValueProxy 基底クラス</td>
+</tr>
+<tr>
+<td style="text-align:left">│　├─ DataSources/BaseDs.php, BaseMstDs.php</td>
+<td style="text-align:left">ファイル</td>
+<td style="text-align:left">DataSource 基底クラス</td>
+</tr>
+<tr>
+<td style="text-align:left">│　├─ Exceptions/</td>
+<td style="text-align:left">ディレクトリ</td>
+<td style="text-align:left">ExceptApp / ExceptModel と Enum/TypeExcept</td>
+</tr>
+<tr>
+<td style="text-align:left">│　└─ Libraries/</td>
+<td style="text-align:left">ディレクトリ</td>
+<td style="text-align:left">横断的ライブラリ群</td>
+</tr>
+<tr>
+<td style="text-align:left">│　　├─ Traits/</td>
+<td style="text-align:left">ディレクトリ</td>
+<td style="text-align:left">TraitCore / TraitDomain / TraitInfra / TraitResponse / TraitUtil ...</td>
+</tr>
+<tr>
+<td style="text-align:left">│　　└─ Stateful, Stateless</td>
+<td style="text-align:left">ディレクトリ</td>
+<td style="text-align:left">シングルトン・静的ファサード類</td>
+</tr>
+<tr>
+<td style="text-align:left">├─ Domains/</td>
+<td style="text-align:left">ディレクトリ</td>
+<td style="text-align:left">機能ドメインごとの実装（Account / Item / Gacha / Idle / User）</td>
+</tr>
+<tr>
+<td style="text-align:left">│　└─ Item/</td>
+<td style="text-align:left">ディレクトリ</td>
+<td style="text-align:left">機能ドメインの実装例</td>
+</tr>
+<tr>
+<td style="text-align:left">│　　├─ EntItem.php</td>
+<td style="text-align:left">ファイル</td>
+<td style="text-align:left">Entity</td>
+</tr>
+<tr>
+<td style="text-align:left">│　　├─ RepItem.php</td>
+<td style="text-align:left">ファイル</td>
+<td style="text-align:left">Repository</td>
+</tr>
+<tr>
+<td style="text-align:left">│　　├─ VoHub.php</td>
+<td style="text-align:left">ファイル</td>
+<td style="text-align:left">ValueObject 登録</td>
+</tr>
+<tr>
+<td style="text-align:left">│　　└─ VpHub.php</td>
+<td style="text-align:left">ファイル</td>
+<td style="text-align:left">ValueProxy 登録</td>
+</tr>
+<tr>
+<td style="text-align:left">├─ DataSources/</td>
+<td style="text-align:left">ディレクトリ</td>
+<td style="text-align:left">Ds*.php（Eloquent Model への直接アクセス層）</td>
+</tr>
+<tr>
+<td style="text-align:left">├─ Http/</td>
+<td style="text-align:left">ディレクトリ</td>
+<td style="text-align:left">機能ごとのHTTP実装</td>
+</tr>
+<tr>
+<td style="text-align:left">│　├─ Controllers/Cnt*.php</td>
+<td style="text-align:left">ファイル</td>
+<td style="text-align:left">Controller</td>
+</tr>
+<tr>
+<td style="text-align:left">│　├─ Applications/App*.php, Applications/UseCase/Uc*.php</td>
+<td style="text-align:left">ファイル</td>
+<td style="text-align:left">Application / UseCase</td>
+</tr>
+<tr>
+<td style="text-align:left">│　├─ Requests/{Feature}/Req*.php</td>
+<td style="text-align:left">ファイル</td>
+<td style="text-align:left">FormRequest</td>
+</tr>
+<tr>
+<td style="text-align:left">│　└─ Responses/{Feature}/Res*.php</td>
+<td style="text-align:left">ファイル</td>
+<td style="text-align:left">Response</td>
+</tr>
+<tr>
+<td style="text-align:left">└─ Models/</td>
+<td style="text-align:left">ディレクトリ</td>
+<td style="text-align:left">Eloquent Model 本体</td>
+</tr>
+</tbody>
+</table>
+<p><strong>原則</strong>：<code>Core/</code> 配下は横断的な基盤コードのみを置き、機能固有のロジックは <code>Domains/</code> <code>Http/</code> 配下に実装します。</p>
+<hr>
+<p><a id="flow"></a></p>
+<h2 id="リクエストレスポンスの流れ">リクエスト〜レスポンスの流れ</h2>
+<p><code>routes/api.php</code> → Middleware → Controller → (Application / UseCase) → Repository → Entity/ValueObject/ValueProxy → DataSource(Model) → Response、という一方向の流れで実装します。</p>
+<p><code>app/Domains/Item</code> の実装を例に、更新系（書き込み）と参照系（読み取り）の2パターンを示します。</p>
+<p>まず全体像として、リクエストからレスポンスまでのシーケンス図を示します（詳細は <a href="../../ddd/src/overview.md">docs/ddd/src/overview.md</a> 参照）。</p>
+<div style="text-align:center;">
+  <img src="./sequence.png" style="width:100%; max-width:900px; height:auto;" alt="リクエスト〜レスポンスのシーケンス図">
+</div>
+<h3 id="-更新系application-経由">① 更新系（Application 経由）</h3>
+<p><code>POST /develop/item-add</code> の例：</p>
+<pre class="hljs"><code><div><span class="hljs-comment">// routes/api.php</span>
+<span class="hljs-title class_">Route</span>::<span class="hljs-title function_ invoke__">prefix</span>(<span class="hljs-string">&#x27;develop&#x27;</span>)-&gt;<span class="hljs-title function_ invoke__">controller</span>(<span class="hljs-title class_">CntDevelop</span>::<span class="hljs-variable language_">class</span>)-&gt;<span class="hljs-title function_ invoke__">group</span>(function () {
+    <span class="hljs-title class_">Route</span>::<span class="hljs-title function_ invoke__">post</span>(<span class="hljs-string">&#x27;item-add&#x27;</span>, <span class="hljs-string">&#x27;itemAdd&#x27;</span>);
+});
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-comment">// app/Http/Controllers/CntDevelop.php</span>
+<span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">itemAdd</span>(<span class="hljs-params">AppDevelop <span class="hljs-variable">$app</span>, ReqDevelopItemAdd <span class="hljs-variable">$req</span></span>): <span class="hljs-title">void</span>
+</span>{
+    <span class="hljs-variable language_">$this</span>-&gt;_<span class="hljs-title class_">ResponseModify</span>::<span class="hljs-title function_ invoke__">set</span>(<span class="hljs-title class_">ResSuccess</span>::<span class="hljs-variable language_">class</span>);
+    <span class="hljs-variable">$app</span>-&gt;<span class="hljs-title function_ invoke__">itemAdd</span>(<span class="hljs-variable">$req</span>);
+}
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-comment">// app/Http/Applications/AppDevelop.php</span>
+<span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">itemAdd</span>(<span class="hljs-params">ReqDevelopItemAdd <span class="hljs-variable">$req</span></span>): <span class="hljs-title">void</span>
+</span>{
+    <span class="hljs-variable">$rep_item</span> = <span class="hljs-variable language_">$this</span>-&gt;_<span class="hljs-title class_">Domain</span>::<span class="hljs-title function_ invoke__">rep</span>(<span class="hljs-title class_">RepHub</span>::<span class="hljs-variable constant_">REP_ITEM</span>);
+    <span class="hljs-variable">$ent_item</span> = <span class="hljs-variable">$rep_item</span>-&gt;<span class="hljs-title function_ invoke__">find</span>(<span class="hljs-variable">$req</span>-&gt;user_id, <span class="hljs-variable">$req</span>-&gt;item_id);
+    <span class="hljs-keyword">if</span> (<span class="hljs-variable">$ent_item</span>-&gt;<span class="hljs-title function_ invoke__">isEmpty</span>()) {
+        <span class="hljs-variable">$ent_item</span> = <span class="hljs-variable">$rep_item</span>-&gt;<span class="hljs-title function_ invoke__">makeDraft</span>(<span class="hljs-variable">$req</span>-&gt;user_id, <span class="hljs-variable">$req</span>-&gt;item_id);
+    }
+
+    <span class="hljs-variable">$vo_item</span> = <span class="hljs-variable language_">$this</span>-&gt;_<span class="hljs-title class_">Domain</span>::<span class="hljs-title function_ invoke__">mstVo</span>(<span class="hljs-title class_">VoHub</span>::<span class="hljs-variable constant_">VO_M_ITEM</span>)-&gt;<span class="hljs-title function_ invoke__">findOrFail</span>(<span class="hljs-variable">$req</span>-&gt;item_id);
+    <span class="hljs-variable">$ent_item</span>-&gt;<span class="hljs-title function_ invoke__">end_at</span>(<span class="hljs-variable">$vo_item</span>-&gt;end_at);
+    <span class="hljs-variable">$sum_amount</span> = <span class="hljs-variable">$vo_item</span>-&gt;<span class="hljs-title function_ invoke__">clampToMaxStock</span>(<span class="hljs-variable">$ent_item</span>-&gt;amount + <span class="hljs-variable">$req</span>-&gt;amount);
+
+    <span class="hljs-variable">$ent_item</span>-&gt;<span class="hljs-title function_ invoke__">amount</span>(<span class="hljs-variable">$sum_amount</span>);
+    <span class="hljs-variable">$rep_item</span>-&gt;<span class="hljs-title function_ invoke__">persist</span>(<span class="hljs-variable">$ent_item</span>);
+}
+</div></code></pre>
+<p>Controller は <code>AppDevelop</code> と <code>ReqDevelopItemAdd</code>（FormRequest）を<strong>型ヒントするだけ</strong>で、Laravel のコンテナがバリデーション込みで解決してくれます。Controller はどの <code>Response</code> クラスを使うかを <code>_ResponseModify::set()</code> で指定するだけで、ビジネスロジックは持ちません。</p>
+<h3 id="-参照系response-直結薄いcontroller">② 参照系（Response 直結・薄いController）</h3>
+<p><code>GET /item/find</code> の例：</p>
+<pre class="hljs"><code><div><span class="hljs-comment">// app/Http/Controllers/CntItem.php</span>
+<span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">find</span>(<span class="hljs-params"></span>): <span class="hljs-title">void</span>
+</span>{
+    <span class="hljs-variable language_">$this</span>-&gt;_<span class="hljs-title class_">ResponseModify</span>::<span class="hljs-title function_ invoke__">set</span>(<span class="hljs-title class_">ResItemFind</span>::<span class="hljs-variable language_">class</span>);
+}
+</div></code></pre>
+<pre class="hljs"><code><div><span class="hljs-comment">// app/Http/Responses/Item/ResItemFind.php</span>
+<span class="hljs-keyword">public</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">toResponse</span>(<span class="hljs-params">Request|ReqItemFind <span class="hljs-variable">$req</span></span>): <span class="hljs-title">JsonResponse</span>
+</span>{
+    <span class="hljs-variable">$rep_item</span> = <span class="hljs-variable language_">$this</span>-&gt;_<span class="hljs-title class_">Domain</span>::<span class="hljs-title function_ invoke__">rep</span>(<span class="hljs-title class_">RepHub</span>::<span class="hljs-variable constant_">REP_ITEM</span>);
+    <span class="hljs-variable">$ent_item</span> = <span class="hljs-variable">$rep_item</span>-&gt;<span class="hljs-title function_ invoke__">findOrFail</span>(<span class="hljs-variable">$req</span>-&gt;user_id, <span class="hljs-variable">$req</span>-&gt;item_id);
+    <span class="hljs-variable language_">$this</span>-&gt;_result[<span class="hljs-string">&#x27;items&#x27;</span>][] = <span class="hljs-variable">$ent_item</span>-&gt;<span class="hljs-title function_ invoke__">toArray</span>();
+
+    <span class="hljs-keyword">return</span> <span class="hljs-title function_ invoke__">response</span>()-&gt;<span class="hljs-title function_ invoke__">json</span>([<span class="hljs-string">&#x27;success&#x27;</span> =&gt; <span class="hljs-number">1</span>, <span class="hljs-string">&#x27;result&#x27;</span> =&gt; (<span class="hljs-keyword">object</span>)<span class="hljs-variable language_">$this</span>-&gt;_result]);
+}
+</div></code></pre>
+<p>単純な参照系（更新を伴わない GET）は Application を経由せず、<code>Response</code> クラスが直接 Repository を呼び出す薄い構成にできます。<strong>更新を伴う／複数ドメインをまたぐ処理は Application(UseCase) を経由させる</strong>のが原則です。</p>
+<h3 id="-middleware-によるレスポンス生成とトランザクション制御">③ Middleware によるレスポンス生成とトランザクション制御</h3>
+<ul>
+<li><code>mdl.response</code>（<code>MdlResponse</code>）：Controller 内で <code>_ResponseModify::set()</code> されたクラスを解決し、<code>toResponse()</code> を呼んで最終的な <code>JsonResponse</code> を生成。HTTPステータスが 200 以外なら例外を投げる。</li>
+<li><code>mdl.transaction</code>（<code>MdlTransaction</code>）：レスポンス生成後、ロールバックフラグが立っていなければ開いているトランザクションを commit、立っていれば rollback。</li>
+</ul>
+<p>これにより、<strong>Controller / Application 側は例外を投げるだけで良く、commit/rollback を意識する必要がない</strong>構成になっています（<code>bootstrap/app.php</code> の <code>withExceptions</code> で例外発生時に <code>StfStaTransaction::enableRollback()</code> が呼ばれます）。</p>
+<hr>
+<p><a id="layers"></a></p>
+<h2 id="レイヤー別の役割">レイヤー別の役割</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">レイヤー</th>
+<th style="text-align:left">命名</th>
+<th style="text-align:left">役割</th>
+<th style="text-align:left">実装例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Controller</td>
+<td style="text-align:left"><code>Cnt*</code></td>
+<td style="text-align:left">Response クラスの指定、Application 呼び出し。ロジックを持たない</td>
+<td style="text-align:left"><code>CntItem</code>, <code>CntDevelop</code></td>
+</tr>
+<tr>
+<td style="text-align:left">Application / UseCase</td>
+<td style="text-align:left"><code>App*</code> / <code>Uc*</code></td>
+<td style="text-align:left">ユースケース単位の処理を組み立てる。複数 Repository をまたぐ調整役</td>
+<td style="text-align:left"><code>AppDevelop</code>, <code>UcCreateApiToken</code></td>
+</tr>
+<tr>
+<td style="text-align:left">Repository</td>
+<td style="text-align:left"><code>Rep*</code></td>
+<td style="text-align:left">DataSource から Model を取得し Entity へ変換／永続化</td>
+<td style="text-align:left"><code>RepItem</code></td>
+</tr>
+<tr>
+<td style="text-align:left">Entity</td>
+<td style="text-align:left"><code>Ent*</code></td>
+<td style="text-align:left">ドメインの振る舞い（ビジネスルール）を持つ。ValueProxy 経由で状態変更</td>
+<td style="text-align:left"><code>EntItem</code></td>
+</tr>
+<tr>
+<td style="text-align:left">ValueObject</td>
+<td style="text-align:left"><code>Vo*</code> / マスタは <code>VoM*</code></td>
+<td style="text-align:left">不変なマスタデータ・値の集合を表現</td>
+<td style="text-align:left"><code>VoMItem</code></td>
+</tr>
+<tr>
+<td style="text-align:left">ValueProxy</td>
+<td style="text-align:left"><code>Vp*</code></td>
+<td style="text-align:left">Entity の Mutable な状態変更ロジックを分離</td>
+<td style="text-align:left"><code>VpItem</code></td>
+</tr>
+<tr>
+<td style="text-align:left">DataSource</td>
+<td style="text-align:left"><code>Ds*</code></td>
+<td style="text-align:left">Eloquent Model への実クエリ実行（ORM 操作はここに閉じ込める）</td>
+<td style="text-align:left"><code>DsUItem</code></td>
+</tr>
+<tr>
+<td style="text-align:left">Request</td>
+<td style="text-align:left"><code>Req*</code></td>
+<td style="text-align:left"><code>FormRequest</code> を継承したバリデーション定義</td>
+<td style="text-align:left"><code>ReqItemFind</code></td>
+</tr>
+<tr>
+<td style="text-align:left">Response</td>
+<td style="text-align:left"><code>Res*</code></td>
+<td style="text-align:left">レスポンス整形。参照系はここで直接取得することもある</td>
+<td style="text-align:left"><code>ResItemFind</code></td>
+</tr>
+</tbody>
+</table>
+<p>Entity・ValueObject・DataSource は <code>App\Core\Domains\*</code> / <code>App\Core\DataSources\*</code> の Base クラスを継承して実装します。</p>
+<hr>
+<p><a id="hub"></a></p>
+<h2 id="hub-パターンサービスロケータ">Hub パターン（サービスロケータ）</h2>
+<p>各ドメインの Repository / Entity / ValueObject / ValueProxy / DataSource は、<strong>クラス名を直接 <code>use</code> せず</strong> <code>*Hub</code> クラスの定数経由で参照します。</p>
+<pre class="hljs"><code><div><span class="hljs-comment">// app/Domains/RepHub.php</span>
+<span class="hljs-keyword">final</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RepHub</span>
+</span>{
+    <span class="hljs-keyword">const</span> <span class="hljs-variable constant_">string</span> REP_ITEM = <span class="hljs-title class_">RepItem</span>::<span class="hljs-variable language_">class</span>;
+    <span class="hljs-keyword">const</span> <span class="hljs-variable constant_">string</span> REP_GACHA = <span class="hljs-title class_">RepGacha</span>::<span class="hljs-variable language_">class</span>;
+    <span class="hljs-comment">// ...</span>
+}
+</div></code></pre>
+<p>呼び出し側は <code>TraitDomain</code> を通じて生えている <code>_Domain</code> ファサードから解決します。</p>
+<pre class="hljs"><code><div><span class="hljs-variable">$rep_item</span> = <span class="hljs-variable language_">$this</span>-&gt;_<span class="hljs-title class_">Domain</span>::<span class="hljs-title function_ invoke__">rep</span>(<span class="hljs-title class_">RepHub</span>::<span class="hljs-variable constant_">REP_ITEM</span>);
+<span class="hljs-variable">$ent_item</span> = <span class="hljs-variable language_">$this</span>-&gt;_<span class="hljs-title class_">Domain</span>::<span class="hljs-title function_ invoke__">ent</span>(<span class="hljs-title class_">EntHub</span>::<span class="hljs-variable constant_">ENT_ITEM</span>)-&gt;<span class="hljs-title function_ invoke__">init</span>(<span class="hljs-variable">$model</span>);
+<span class="hljs-variable">$vo_item</span>  = <span class="hljs-variable language_">$this</span>-&gt;_<span class="hljs-title class_">Domain</span>::<span class="hljs-title function_ invoke__">mstVo</span>(<span class="hljs-title class_">VoHub</span>::<span class="hljs-variable constant_">VO_M_ITEM</span>)-&gt;<span class="hljs-title function_ invoke__">findOrFail</span>(<span class="hljs-variable">$id</span>);
+<span class="hljs-variable">$vp_item</span>  = <span class="hljs-variable language_">$this</span>-&gt;_<span class="hljs-title class_">Domain</span>::<span class="hljs-title function_ invoke__">vp</span>(<span class="hljs-title class_">VpHub</span>::<span class="hljs-variable constant_">VP_ITEM</span>)-&gt;<span class="hljs-title function_ invoke__">init</span>(<span class="hljs-variable">$this</span>);
+</div></code></pre>
+<p>同様に UseCase は <code>UcHub</code> 定数 + <code>_UseCase::make()</code> で解決します（<code>AppAccount::login()</code> 参照）。<br />
+<strong>新しいクラスを追加したら、対応する <code>*Hub</code> への定数追加を忘れないこと。</strong></p>
+<hr>
+<p><a id="howto"></a></p>
+<h2 id="新機能を実装する手順">新機能を実装する手順</h2>
+<p>例：新しい機能ドメイン <code>Foo</code> に更新系エンドポイント <code>POST /foo/do</code> を追加する場合。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">#</th>
+<th style="text-align:left">手順</th>
+<th style="text-align:left">配置先</th>
+<th style="text-align:left">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:left">Route定義</td>
+<td style="text-align:left">routes/api.php</td>
+<td style="text-align:left"><code>Route::prefix('foo')-&gt;controller(CntFoo::class)-&gt;group(...)</code> を追加</td>
+</tr>
+<tr>
+<td style="text-align:left">2</td>
+<td style="text-align:left">Request作成</td>
+<td style="text-align:left">app/Http/Requests/Foo/ReqFooDo.php</td>
+<td style="text-align:left"><code>BaseReq</code> を継承したバリデーションクラスを作成</td>
+</tr>
+<tr>
+<td style="text-align:left">3</td>
+<td style="text-align:left">Controller作成</td>
+<td style="text-align:left">app/Http/Controllers/CntFoo.php</td>
+<td style="text-align:left"><code>BaseCnt</code> を継承し、<code>do(AppFoo $app, ReqFooDo $req)</code> を実装。中身は <code>_ResponseModify::set()</code> と <code>$app-&gt;do($req)</code> のみ</td>
+</tr>
+<tr>
+<td style="text-align:left">4</td>
+<td style="text-align:left">Application作成</td>
+<td style="text-align:left">app/Http/Applications/AppFoo.php</td>
+<td style="text-align:left"><code>BaseApp</code> を継承し、<code>do()</code> にユースケースを実装。複数ドメインをまたぐ／再利用したい処理は <code>Http/Applications/UseCase/Foo/Uc*.php</code> に切り出す</td>
+</tr>
+<tr>
+<td style="text-align:left">5</td>
+<td style="text-align:left">Domain実装</td>
+<td style="text-align:left">app/Domains/Foo/</td>
+<td style="text-align:left"><code>EntFoo</code>（<code>BaseEnt</code> 継承）・<code>RepFoo</code>（<code>BaseRep</code> 継承）・必要に応じて <code>VoFoo</code> / <code>VpFoo</code> を作成</td>
+</tr>
+<tr>
+<td style="text-align:left">6</td>
+<td style="text-align:left">DataSource作成</td>
+<td style="text-align:left">app/DataSources/DsFoo.php</td>
+<td style="text-align:left"><code>BaseDs</code> を継承し、Eloquent Model へのクエリを実装</td>
+</tr>
+<tr>
+<td style="text-align:left">7</td>
+<td style="text-align:left">Hub登録</td>
+<td style="text-align:left">RepHub / EntHub / DsHub（必要なら VoHub / VpHub / UcHub）</td>
+<td style="text-align:left">対応する定数を追加</td>
+</tr>
+<tr>
+<td style="text-align:left">8</td>
+<td style="text-align:left">Response作成</td>
+<td style="text-align:left">app/Http/Responses/Foo/ResFoo*.php</td>
+<td style="text-align:left">参照系のみを持たせたい場合は直接 Repository を呼ぶ実装を追加し、Controller からは <code>_ResponseModify::set()</code> のみ呼ぶ</td>
+</tr>
+<tr>
+<td style="text-align:left">9</td>
+<td style="text-align:left">例外</td>
+<td style="text-align:left">App\Core\Exceptions\Enum\TypeExcept</td>
+<td style="text-align:left">業務エラーの種別を追加し <code>$this-&gt;_Except::app(TypeExcept::Xxx)</code> で投げる</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a id="naming"></a></p>
+<h2 id="命名規則">命名規則</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">プレフィックス</th>
+<th style="text-align:left">意味</th>
+<th style="text-align:left">配置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>Cnt</code></td>
+<td style="text-align:left">Controller</td>
+<td style="text-align:left"><code>app/Http/Controllers</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>App</code></td>
+<td style="text-align:left">Application（ユースケースの組み立て）</td>
+<td style="text-align:left"><code>app/Http/Applications</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Uc</code></td>
+<td style="text-align:left">UseCase（Application から切り出した単一処理）</td>
+<td style="text-align:left"><code>app/Http/Applications/UseCase</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Rep</code></td>
+<td style="text-align:left">Repository</td>
+<td style="text-align:left"><code>app/Domains/{Feature}</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ent</code></td>
+<td style="text-align:left">Entity</td>
+<td style="text-align:left"><code>app/Domains/{Feature}</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Vo</code> / <code>VoM</code></td>
+<td style="text-align:left">ValueObject（<code>VoM</code>はマスタ系）</td>
+<td style="text-align:left"><code>app/Domains/{Feature}</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Vp</code></td>
+<td style="text-align:left">ValueProxy</td>
+<td style="text-align:left"><code>app/Domains/{Feature}</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Ds</code> / <code>DsU</code> / <code>DsM</code></td>
+<td style="text-align:left">DataSource（<code>U</code>=ユーザデータ、<code>M</code>=マスタ）</td>
+<td style="text-align:left"><code>app/DataSources</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Req</code></td>
+<td style="text-align:left">FormRequest</td>
+<td style="text-align:left"><code>app/Http/Requests/{Feature}</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Res</code></td>
+<td style="text-align:left">Response</td>
+<td style="text-align:left"><code>app/Http/Responses/{Feature}</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>Mdl</code></td>
+<td style="text-align:left">Middleware</td>
+<td style="text-align:left"><code>app/Core/Http/Middlewares</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>*Hub</code></td>
+<td style="text-align:left">クラス参照定数の集約</td>
+<td style="text-align:left">各ドメイン配下</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p><a id="exception"></a></p>
+<h2 id="例外エラーハンドリング">例外・エラーハンドリング</h2>
+<p><code>bootstrap/app.php</code> の <code>withExceptions()</code> で一元的にハンドリングされます。</p>
+<ul>
+<li><code>ExceptApp</code> を継承した例外 → HTTP 422</li>
+<li><code>ExceptModel</code> を継承した例外 → HTTP 404</li>
+<li>それ以外 → HTTP 401</li>
+</ul>
+<p>例外発生時は自動的に <code>StfStaTransaction::enableRollback()</code> が呼ばれ、<code>mdl.transaction</code> ミドルウェアが開いているトランザクションを rollback します。業務エラーは次の形で投げます。</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">throw</span> <span class="hljs-variable language_">$this</span>-&gt;_<span class="hljs-title class_">Except</span>::<span class="hljs-title function_ invoke__">app</span>(<span class="hljs-title class_">TypeExcept</span>::<span class="hljs-variable constant_">AppItemNotEnoughUnits</span>);
+</div></code></pre>
+<hr>
+<p><a id="stack"></a></p>
+<h2 id="使用技術">使用技術</h2>
+<ul>
+<li>Laravel 12（PHP 8.4）</li>
+<li>Laravel Sanctum（API 認証）</li>
+<li>Laravel MCP（<code>app/Mcp</code> 配下）</li>
+<li>Docker（MySQL, Redis）</li>
+<li>AWS（EC2, RDS, Valkey）</li>
+</ul>
+<hr>
+<p><a id="reference"></a></p>
+<h2 id="参考資料">参考資料</h2>
+<ul>
+<li>設計思想・レイヤー構成の全体像：<a href="../../ddd/src/overview.md">docs/ddd/src/overview.md</a>（<a href="https://github.com/bit-craft-io/nukui-ddd">GitHub: nukui-ddd</a>）</li>
+<li>Xdebug 環境構築：<a href="../../xdebug/src/xdebug.md">docs/xdebug/src/xdebug.md</a></li>
+</ul>
+</div>
+</div>
+
+</body>
+</html>

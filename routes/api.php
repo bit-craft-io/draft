@@ -24,6 +24,11 @@ Route::domain(StlStaConfig::app()->url)->group(function () {
         Route::prefix('user')->controller(CntUser::class)->group(function () {
             Route::get('info', 'info');
         });
+        Route::prefix('payment')->controller(CntIdle::class)->group(function () {
+            Route::post('info', 'info');
+            Route::post('history', 'history');
+            Route::post('charge', 'charge');
+        });
         Route::prefix('item')->controller(CntItem::class)->group(function () {
             Route::get('get', 'get');
             Route::get('find', 'find');
