@@ -77,21 +77,20 @@ Laravel 13 自体の PHP 要件は 8.3 以上。8.5.12 以上という要件は�
 | zip、pdo_mysql、intl、bcmath | docker-php-ext-install | PHP 本体に同梱 | PHP の版に従う |
 | apcu、redis、xhprof、xdebug | pecl install | 指定なし | 未確認(PECL の情報を取得できなかった) |
 
-## 現状との差分(未反映)
+## 現状との差分
 
-この記録は、移行後の版を示す。リポジトリの実体は、次のとおり未更新。
+この記録は、移行後の版を示す。リポジトリの実体は、次のとおり。
 
-| 対象 | 現在 | 移行後 |
-|---|---|---|
-| `composer.json` の `php` | ^8.4 | ^8.5.12 |
-| `composer.json` の `laravel/framework` | ^12.0 | ^13.0 |
-| `composer.json` の `laravel/tinker` | ^2.10.1 | ^3.0 |
-| `composer.json` の `laravel/mcp` | ^0.7.1 | ^1.1 |
-| `composer.json` の `phpunit/phpunit` | ^11.5 | ^12.0 |
-| `composer.lock` | Laravel 12.47.0 | `composer update` で再生成 |
-| `docker/container/php/Dockerfile` | `php:8.4-fpm` | `php:8.5.12-fpm` |
-| `docker/container/job/Dockerfile` | `php:8.4` | `php:8.5.12` |
-| `README.md` の使用技術 | Laravel(PHP 8.4) | PHP 8.5 |
+| 対象 | 現在 | 移行後 | 状態 |
+|---|---|---|---|
+| `composer.json` | `php` ^8.5.12、`laravel/framework` ^13.0、`laravel/tinker` ^3.0、`laravel/mcp` ^1.1、`phpunit/phpunit` ^12.0 | 同左 | **反映済み**(動作は未確認) |
+| `composer.lock` | Laravel 13.40.0 ほか、上の版で再生成(`composer update --no-install`) | 同左 | **反映済み**(インストール・テストは未実施) |
+| `docker/container/php/Dockerfile` | `php:8.4-fpm` | `php:8.5.12-fpm` | 未更新 |
+| `docker/container/job/Dockerfile` | `php:8.4` | `php:8.5.12` | 未更新 |
+| `README.md` の使用技術 | Laravel(PHP 8.4) | PHP 8.5 | 未更新 |
+
+- `composer.lock` は、PHP 8.3 の環境で、`--ignore-platform-req=php` を付けて再生成した。`platform` には `php: ^8.5.12` が記録されている。
+- `composer update` は、依存全体を更新した。Laravel 13 に合わせた変更以外にも、推移的な依存のメジャー更新が含まれる(例: `guzzlehttp/guzzle` 7.10.0 → 8.3.1、`guzzlehttp/promises` 2.3.0 → 3.1.0、`brick/math` 0.14.1 → 1.0.0)。影響は未確認。
 
 ## Laravel 12 から 13 への移行で影響を確認する箇所
 
