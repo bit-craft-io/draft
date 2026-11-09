@@ -1,82 +1,106 @@
 # 対応バージョン
 
-kind・Agones・OM2(Open Match 2)と、Go・Protobuf・gRPC の対応バージョンを、公式の情報から記録する。
-公式で確認できないものは「未確認」と書く。
+PHP と Laravel の対応バージョンと、それに合わせるミドルウェア・パッケージの版を記録する。
+確認できないものは「未確認」と書く。
 
-確認日: 2026-11-02(Go・Protobuf・gRPC は 2026-11-04)
+確認日: 2026-11-09
 
-## 一覧
+## 方針
 
-| 対象 | 確認したバージョン | 対応する Kubernetes | 確認元(公式) |
-|---|---|---|---|
-| Agones | 1.61.0(最新リリース) | 1.34, 1.35, 1.36 | https://agones.dev/site/docs/installation/ / https://github.com/agones-dev/agones/releases/tag/v1.61.0 |
-| kind | v0.33.0(最新リリース) | ノードイメージ: v1.37.0(既定), v1.36.4, v1.35.8, v1.34.11 | https://github.com/kubernetes-sigs/kind/releases/tag/v0.33.0 |
-| Helm | 4.1.3 以上(Agones 1.61.0 の Helm 手順の前提) | 未確認 | https://github.com/agones-dev/agones/blob/v1.61.0/site/content/en/docs/Installation/Install%20Agones/helm.md(Prerequisites) / https://helm.sh/docs/intro/install/ |
-| OM2(Open Match 2) | v2.0.2(最新タグ。GitHub Releases は無し) | 未確認 | https://github.com/googleforgames/open-match2/tree/v2.0.2 / https://github.com/googleforgames/open-match2/blob/v2.0.2/go.mod |
-| Go | 1.27.3(最新の安定版) | - | https://go.dev/dl/ |
-| protoc | 27.2(OM2 v2.0.2 の生成に使われた版) | - | https://github.com/protocolbuffers/protobuf/releases/tag/v27.2 / https://github.com/googleforgames/open-match2/blob/v2.0.2/proto/Dockerfile |
-| protoc-gen-go | v1.34.2(OM2 v2.0.2 の生成に使われた版) | - | https://github.com/googleforgames/open-match2/blob/v2.0.2/pkg/pb/api.pb.go(先頭の versions) |
-| protoc-gen-go-grpc | v1.4.0(OM2 v2.0.2 の生成に使われた版) | - | https://github.com/googleforgames/open-match2/blob/v2.0.2/pkg/pb/api_grpc.pb.go(先頭の versions) |
-| gRPC-Go(`google.golang.org/grpc`) | v1.65.0(OM2 v2.0.2 の `go.mod` と同じ) | - | https://github.com/googleforgames/open-match2/blob/v2.0.2/go.mod |
-| Protobuf Go(`google.golang.org/protobuf`) | v1.34.2(OM2 v2.0.2 の `go.mod` と同じ) | - | https://github.com/googleforgames/open-match2/blob/v2.0.2/go.mod |
+- PHP は **8.5.12 以上**を必須とする。
+  - 根拠: GHSA-w8hw-w9fx-j79w(CVE-2026-109618)、GHSA-6wmf-4rv5-p3rp(CVE-2026-109619)
+  - 上記アドバイザリの原文は、この記録の作成時に参照できなかった(未確認)。要件は依頼者の指定による。
+- Laravel は **13 系**とする。
+- 「解決結果」は、`composer update --dry-run`(PHP 8.5.12 を指定)で依存を解決した結果であり、動作を確認した版ではない。
+  `composer.lock` を更新してテストが通ったら、確認済みに書き換える。
 
-## 補足
+## 本体
 
-### Agones
-
-- 公式の「Agones and Kubernetes Supported Versions」の表で、Agones 1.61 は Kubernetes 1.34, 1.35, 1.36 に対応する。
-- 公式では、この 3 バージョンは GKE でテストしたもので、他のバージョンは未サポートとされている。
-- 公式でサポートが明記されている環境は GKE・AKS・EKS・Minikube。kind 上での動作は未確認。
-
-### Helm
-
-- Agones 1.61.0 の Helm 手順は、前提を「Helm package manager 4.1.3+」としている。Agones は Helm チャート `agones/agones` の 1.61.0 を `--version 1.61.0` で固定して入れる(手順は [phase1/README.md](../phase1/README.md))。
-- Devin の VM では Helm v4.3.1 で導入できることを確認した。
-
-### kind
-
-- v0.33.0 の既定のノードイメージは `kindest/node:v1.37.0`。これは Agones 1.61 の対応範囲(1.34〜1.36)の外にある。
-- Agones の対応範囲に入るノードイメージは v1.36.4, v1.35.8, v1.34.11。公式は `@sha256` のダイジェスト指定で使うよう求めている。
-- ダイジェストは、v0.33.0 のリリースノートに記載の値。
-
-| ノードイメージ | ダイジェスト |
-|---|---|
-| `kindest/node:v1.37.0`(既定) | `sha256:a1ed56cfb0e7b93589bdf97c8cd566405a265939e3620fc4f5de89adff580ae5` |
-| `kindest/node:v1.36.4` | `sha256:099e049362a1526b2db71494e1947aae99bd16290d7c895f2b7ea312e3cbfaed` |
-| `kindest/node:v1.35.8` | `sha256:07b2536e30b803ed61d1677a79df6115f798ce64c80f9e22f6ed45afd09323c0` |
-| `kindest/node:v1.34.11` | `sha256:44e222ee2132dab25ff87301682f89eb82c7880ea3a1bf543bfe9708fd08d67d` |
-
-### OM2(Open Match 2)
-
-- 公式 README では、public preview とされている。
-- 対応する Kubernetes のバージョンは、公式で確認できないため未確認。
-- タグ v2.0.2 のデプロイ例は Cloud Run のみ(https://github.com/googleforgames/open-match2/tree/v2.0.2/deploy)。GKE の例(`deploy/gke/`)は main ブランチにだけある。
-- タグ v2.0.2 のデプロイ例(`deploy/service.yaml`)では `OM_REDIS_WRITE_HOST` / `OM_REDIS_READ_HOST` を設定している。`docs/DEVELOPMENT.md` も、デプロイの前提に Redis インスタンスを挙げている。Redis の要否と構成は、[phase2/README.md](../phase2/README.md#redis-の要否と構成om2-公式で確認した結果) を参照(公式の README には Redis の記載が無い)。
-- `go.mod` の Go のバージョンは、タグ v2.0.2 では `go 1.22.5`(main ブランチでは `go 1.24.6`)。
-
-### Go・Protobuf・gRPC(phase2)
-
-- phase2 の CLI(OM2 を呼ぶ側)で使う。手順は [phase2/README.md](../phase2/README.md)。
-- protoc・protoc-gen-go・protoc-gen-go-grpc は、OM2 v2.0.2 が公開している生成済みのコード(`pkg/pb/`)の先頭に書かれた版に合わせた。生成済みのコードの先頭の `protoc v5.27.2` は、OM2 の `proto/Dockerfile` の `PROTOC_VER=27.2` と合う(Devin の VM で protoc 27.2 を使って生成すると、先頭に `protoc v5.27.2` と書かれた)。
-- gRPC-Go と Protobuf Go は、OM2 v2.0.2 の `go.mod` と同じ版にした。
-- Go は、OM2 v2.0.2 の `go.mod` では `go 1.22.5` だが、phase2 では確認日の最新の安定版(1.27.3)を使う。Devin の VM では、Go 1.27.3 で上の版の gRPC-Go・Protobuf Go を使ってビルドとテストが通ることを確認した。
-
-### phase2(OM2 を kind で動かす)で使うもの
-
-確認日: 2026-11-04。手順は [phase2/README.md](../phase2/README.md)。Go のモジュールの版(open-match2 v2.0.2 など)は [phase2/go.mod](../phase2/go.mod) にある。
-
-| 対象 | 使うもの | 確認元(公式) |
+| 対象 | 版 | 確認元 |
 |---|---|---|
-| om-core のイメージ | `us-docker.pkg.dev/open-match-public-images/open-match2/om-core@sha256:57003077dae638801826138332f5793364fe13995de78b4475c8951e17e37e54`(タグ `latest` のダイジェスト。タグは `latest` しか無い) | https://github.com/googleforgames/open-match2/blob/ac25040aa27e7746545db02a63fc22535842f83a/deploy/gke/om.yaml |
-| Redis のイメージ | `redis:8.10.3@sha256:de1068af6f552240dfab67bcc9bfef99bfc60f776bb4580ef077ea4c8c97e848`(2026-11-04 のタグ `latest` と同じダイジェスト。イメージの `REDIS_VERSION` は 8.10.3。タグは同じ版のまま作り直されうるため、ダイジェストも付けた) | https://github.com/googleforgames/open-match2/blob/ac25040aa27e7746545db02a63fc22535842f83a/deploy/gke/redis.yaml |
-| MMF のサンプル | open-match-ecosystem v2.0.1 の `v2/mmf/` | https://github.com/googleforgames/open-match-ecosystem/tree/v2.0.1/v2/mmf |
-| pack | v0.40.10 | https://github.com/buildpacks/pack/releases/tag/v0.40.10 |
-| MMF のイメージのビルダー | `gcr.io/buildpacks/builder:google-22`、Go は `GOOGLE_GO_VERSION=1.27.3` で固定 | https://cloud.google.com/docs/buildpacks/go |
+| PHP | 8.5.12 以上(必須) | 上記アドバイザリ(依頼者の指定) |
+| Laravel(`laravel/framework`) | ^13.0(解決結果: 13.40.0) | composer の依存解決 |
 
-- om-core のイメージが、タグ v2.0.2 のソースから作られたかは未確認。`go.mod` の open-match2 v2.0.2 の API とずれる可能性がある。Devin の VM では、v2.0.2 の生成コードの型で `CreateTicket`・`ActivateTickets`・`InvokeMatchmakingFunctions` を呼べた。
-- OM2 が対応する Redis のバージョンは、公式で確認できないため未確認。
+Laravel 13 自体の PHP 要件は 8.3 以上。8.5.12 以上という要件は、それより厳しい上位の制約として扱う。
 
-## 組み合わせ
+出典: https://laravel.com/docs/13.x/deployment#server-requirements
 
-- kind(v0.33.0)で Agones(1.61)を使う場合、ノードイメージは v1.34.11 / v1.35.8 / v1.36.4 のいずれかが、Agones の対応範囲に入る。ただし、kind 上での Agones の動作は公式では未確認。
-- OM2 と Agones、OM2 と kind の対応関係は、公式で確認できないため未確認。
+## Composer パッケージ(本番)
+
+| 対象 | 現在の制約 | 変更後の制約 | 解決結果 | 備考 |
+|---|---|---|---|---|
+| php | ^8.4 | ^8.5.12 | - | |
+| laravel/framework | ^12.0 | ^13.0 | 13.40.0 | |
+| laravel/tinker | ^2.10.1 | ^3.0 | 3.0.2 | 公式のアップグレードガイドで指定。2.x は 13 と共存できない(依存解決で確認) |
+| laravel/mcp | ^0.7.1 | ^1.1 | 1.1.2 | 公式のアップグレードガイドに記載なし。0.7.x の 13 対応は未確認。0.x から 1.x のメジャー更新 |
+| laravel/sanctum | ^4.0 | ^4.0(変更なし) | 4.3.3 | |
+| google/protobuf | ^4.33 | ^4.33(変更なし) | 4.33.6 | |
+| hidehalo/nanoid-php | ^2.0 | ^2.0(変更なし) | 2.0 | |
+
+## Composer パッケージ(開発)
+
+| 対象 | 現在の制約 | 変更後の制約 | 解決結果 | 備考 |
+|---|---|---|---|---|
+| phpunit/phpunit | ^11.5 | ^12.0 | 12.5.43 | 公式のアップグレードガイドで指定 |
+| phpstan/phpstan | ^2.2 | ^2.2(変更なし) | 2.3.5 | |
+| friendsofphp/php-cs-fixer | ^3.95 | ^3.95(変更なし) | 3.95.29 | |
+| laravel/pail | ^1.2.2 | ^1.2.2(変更なし) | 1.2.7 | |
+| laravel/sail | ^1.41 | ^1.41(変更なし) | 1.69.0 | |
+| nunomaduro/collision | ^8.6 | ^8.6(変更なし) | 8.9.5 | |
+| mockery/mockery | ^1.6 | ^1.6(変更なし) | 1.6.15 | |
+| fakerphp/faker | ^1.23 | ^1.23(変更なし) | 1.24.1 | |
+
+出典: https://laravel.com/docs/13.x/upgrade#updating-dependencies (上記の `laravel/framework`・`laravel/tinker`・`phpunit/phpunit` の指定)
+
+## ミドルウェア(Docker)
+
+| 対象 | 現在の設定 | Laravel 13 の公式要件 | 判定 |
+|---|---|---|---|
+| MySQL | 8.0(master / slave) | MySQL 5.7 以上 | 要件を満たす。MySQL 8.0 のサポート期限は未確認 |
+| Redis | 7.0 | Redis サーバーの最低版の記載なし | 未確認 |
+| nginx | タグ指定なし(`latest`) | 記載なし | 版が固定されていない |
+| Node(redoc 用) | 20-alpine | 記載なし | Laravel とは無関係(`docker/container/redoc/Dockerfile`) |
+
+出典:
+- https://laravel.com/docs/13.x/database (サポートする DB と最低版)
+- https://laravel.com/docs/13.x/redis (クライアントの記載のみで、サーバー版の記載なし)
+
+### Redis クライアント
+
+- 公式は PhpRedis(PECL の `redis` 拡張)を既定とし、導入できないときは `predis/predis` を使う。
+- このプロジェクトは `pecl install redis` で PhpRedis を入れている。PECL の版は固定されていない。
+
+## PHP 拡張(Docker で導入)
+
+| 拡張 | 導入方法 | 版 | PHP 8.5.12 対応 |
+|---|---|---|---|
+| zip、pdo_mysql、intl、bcmath | docker-php-ext-install | PHP 本体に同梱 | PHP の版に従う |
+| apcu、redis、xhprof、xdebug | pecl install | 指定なし | 未確認(PECL の情報を取得できなかった) |
+
+## 現状との差分(未反映)
+
+この記録は、移行後の版を示す。リポジトリの実体は、次のとおり未更新。
+
+| 対象 | 現在 | 移行後 |
+|---|---|---|
+| `composer.json` の `php` | ^8.4 | ^8.5.12 |
+| `composer.json` の `laravel/framework` | ^12.0 | ^13.0 |
+| `composer.json` の `laravel/tinker` | ^2.10.1 | ^3.0 |
+| `composer.json` の `laravel/mcp` | ^0.7.1 | ^1.1 |
+| `composer.json` の `phpunit/phpunit` | ^11.5 | ^12.0 |
+| `composer.lock` | Laravel 12.47.0 | `composer update` で再生成 |
+| `docker/container/php/Dockerfile` | `php:8.4-fpm` | `php:8.5.12-fpm` |
+| `docker/container/job/Dockerfile` | `php:8.4` | `php:8.5.12` |
+| `README.md` の使用技術 | Laravel(PHP 8.4) | PHP 8.5 |
+
+## Laravel 12 から 13 への移行で影響を確認する箇所
+
+公式のアップグレードガイド(https://laravel.com/docs/13.x/upgrade)のうち、このプロジェクトに関係しそうなもの。実際の影響は未確認。
+
+| 項目 | 影響度(公式) | このプロジェクトの該当箇所 |
+|---|---|---|
+| CSRF ミドルウェアの改名(`VerifyCsrfToken` / `ValidateCsrfToken` を `PreventRequestForgery` へ) | 高 | `config/sanctum.php` が `ValidateCsrfToken` を参照している。旧名は非推奨の別名として残る |
+| キャッシュ・Redis のキー接頭辞(ハイフン区切りへ) | 低 | `CACHE_PREFIX` / `REDIS_PREFIX` / `SESSION_COOKIE` を明示しない場合、接頭辞が変わる |
+| キャッシュの `serializable_classes` 設定 | 中 | キャッシュにオブジェクトを入れている場合、許可するクラスの明示が必要。`StfStaCache` の使い方は未確認 |
+| MySQL の `upsert` の検証 | 中 | `uniqueBy` が空だと例外になる |
+| MySQL の `DELETE` ... `JOIN` / `ORDER BY` / `LIMIT` | 低 | 使用箇所は未確認 |
