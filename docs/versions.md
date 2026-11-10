@@ -3,13 +3,16 @@
 PHP と Laravel の対応バージョンと、それに合わせるミドルウェア・パッケージの版を記録する。
 確認できないものは「未確認」と書く。
 
-確認日: 2026-11-09
+確認日: 2026-11-09(PHP・ミドルウェアのサポート期限は 2026-11-10 に確認)
 
 ## 方針
 
 - PHP は **8.5.12 以上**を必須とする。
   - 根拠: GHSA-w8hw-w9fx-j79w(CVE-2026-109618)、GHSA-6wmf-4rv5-p3rp(CVE-2026-109619)
-  - 上記アドバイザリの原文は、この記録の作成時に参照できなかった(未確認)。要件は依頼者の指定による。
+  - php.net の ChangeLog(https://www.php.net/ChangeLog-8.php)で、PHP 8.5.12(2026-10-22)の「Core」の修正として、GHSA-w8hw-w9fx-j79w と GHSA-6wmf-4rv5-p3rp(Avoid state corruption via bailout)が記載されていることを確認した。
+  - 同じ2件は、8.4.27、8.3.36、8.2.35 の ChangeLog にも記載されている(8.5 系以外にも、修正済みの版がある)。
+  - CVE 番号(CVE-2026-109618、CVE-2026-109619)との対応は、確認できていない(NVD は、このセッションから取得できなかった。php.net の ChangeLog に CVE 番号の記載はない)。
+  - PHP 8.5 系を使う方針は、依頼者の指定による。
 - Laravel は **13 系**とする。
 - 「解決結果」は、`composer update --dry-run`(PHP 8.5.12 を指定)で依存を解決した結果であり、動作を確認した版ではない。
   `composer.lock` を更新してテストが通ったら、確認済みに書き換える。
@@ -56,12 +59,13 @@ Laravel 13 自体の PHP 要件は 8.3 以上。8.5.12 以上という要件は�
 
 | 対象 | 現在の設定 | Laravel 13 の公式要件 | 判定 |
 |---|---|---|---|
-| MySQL | 8.0(master / slave) | MySQL 5.7 以上 | 要件を満たす。MySQL 8.0 のサポート期限は未確認 |
-| Redis | 7.0 | Redis サーバーの最低版の記載なし | 未確認 |
+| MySQL | 8.0(master / slave) | MySQL 5.7 以上 | Laravel の要件は満たす。**MySQL 8.0 は、サポート期限(EOL)が 2026-04-30 で、終了済み**。後継の 8.4(LTS)の EOL は 2032-04-30 |
+| Redis | 7.0 | Redis サーバーの最低版の記載なし | Laravel の要件は不明。**Redis 7.0 は、EOL が 2024-07-29 で、終了済み**。7.2 は 2029-12-01、7.4 は 2029-12-01 まで |
 | nginx | タグ指定なし(`latest`) | 記載なし | 版が固定されていない |
-| Node(redoc 用) | 20-alpine | 記載なし | Laravel とは無関係(`docker/container/redoc/Dockerfile`) |
+| Node(redoc 用) | 20-alpine | 記載なし | Laravel とは無関係(`docker/container/redoc/Dockerfile`)。**Node 20 は、EOL が 2026-04-30 で、終了済み**。22 は 2027-04-30、24 は 2028-04-30 まで |
 
 出典:
+- https://endoflife.date/api/mysql.json、https://endoflife.date/api/redis.json、https://endoflife.date/api/nodejs.json (サポート期限。2026-11-10 に取得)
 - https://laravel.com/docs/13.x/database (サポートする DB と最低版)
 - https://laravel.com/docs/13.x/redis (クライアントの記載のみで、サーバー版の記載なし)
 
