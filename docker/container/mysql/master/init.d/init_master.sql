@@ -7,10 +7,10 @@ GRANT ALL PRIVILEGES ON log_db.* TO 'root'@'%';
 CREATE DATABASE IF NOT EXISTS test_db;
 GRANT ALL PRIVILEGES ON test_db.* TO 'root'@'%';
 
-CREATE USER 'guest'@'%' IDENTIFIED WITH mysql_native_password BY 'guest';
+CREATE USER 'guest'@'%' IDENTIFIED BY 'guest';
 GRANT ALL PRIVILEGES ON *.* TO 'guest'@'%' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 
-CREATE USER 'replica'@'%' IDENTIFIED WITH mysql_native_password BY 'replica';
+CREATE USER 'replica'@'%' IDENTIFIED BY 'replica';
 GRANT REPLICATION SLAVE ON *.* TO 'replica'@'%';
 FLUSH PRIVILEGES;
