@@ -101,7 +101,14 @@ Laravel 13 自体の PHP 要件は 8.3 以上。8.5.12 以上という要件は�
 | 拡張 | 導入方法 | 版 | PHP 8.5.12 対応 |
 |---|---|---|---|
 | zip、pdo_mysql、intl、bcmath | docker-php-ext-install | PHP 本体に同梱 | PHP の版に従う |
-| apcu、redis、xhprof、xdebug | pecl install | 指定なし | 未確認(PECL の情報を取得できなかった) |
+| apcu、redis、xhprof、xdebug | pecl install | 指定なし(2026-11-10 の PECL の安定版: apcu 5.1.28、redis 6.3.0、xhprof 2.3.10、xdebug 3.5.3) | **確認済み**: `php:8.5.12-fpm` で、4つともビルドでき、`php -m` に表示された(下記) |
+
+### PHP 拡張の確認内容(2026-11-10)
+
+- 検証用の Dockerfile で、`php:8.5.12-fpm` に、`docker-php-ext-install zip pdo_mysql intl bcmath` と、上の4つの PECL 拡張を入れ、`php -m` で8つがすべて読み込まれることを確認した。
+- composer のインストーラーと systemd は、検証から除いた(未確認)。このセッションのコンテナは、外部に接続できないため、プロキシ経由に変更して実行した。PECL は、`pecl install <名前>` ではなく、同じ版の tarball を HTTPS で取得して導入した。
+- `php:8.5.12`(job 用)は、ビルドしていない。入れる拡張は、`php:8.5.12-fpm` の部分集合(`zip`、`pdo_mysql`、`intl`、`apcu`、`redis`)。
+- `mariadb-client`(Dockerfile でインストール)が、MySQL 8.4 の `caching_sha2_password` で認証できるかは、未確認(スクリプトからは使っていない)。
 
 ## 現状との差分
 
@@ -115,9 +122,9 @@ Laravel 13 自体の PHP 要件は 8.3 以上。8.5.12 以上という要件は�
 | `docker/container/mysql/*/Dockerfile`、設定 | `mysql:8.4`(設定を見直し済み) | 同左 | **反映済み**(実際のコンテナで確認) |
 | `docker/docker-compose.yml` の Redis | `redis:7.2` | 同左 | **反映済み**(起動を確認) |
 | `docker/container/redoc/Dockerfile` | `node:24-alpine` | 同左 | **反映済み**(ビルドは未確認) |
-| `docker/container/php/Dockerfile` | `php:8.4-fpm` | `php:8.5.12-fpm` | 未更新 |
-| `docker/container/job/Dockerfile` | `php:8.4` | `php:8.5.12` | 未更新 |
-| `README.md` の使用技術 | Laravel(PHP 8.4) | PHP 8.5 | 未更新 |
+| `docker/container/php/Dockerfile` | `php:8.5.12-fpm` | 同左 | **反映済み**(拡張のビルドは確認済み。composer・systemd は未確認) |
+| `docker/container/job/Dockerfile` | `php:8.5.12` | 同左 | **反映済み**(ビルドは未確認) |
+| `README.md` の使用技術 | Laravel(PHP 8.5) | 同左 | **反映済み** |
 
 - `composer.lock` は、PHP 8.3 の環境で、`--ignore-platform-req=php` を付けて再生成した。`platform` には `php: ^8.5.12` が記録されている。
 - `composer update` は、依存全体を更新した。Laravel 13 に合わせた変更以外にも、推移的な依存のメジャー更新が含まれる(例: `guzzlehttp/guzzle` 7.10.0 → 8.3.1、`guzzlehttp/promises` 2.3.0 → 3.1.0、`brick/math` 0.14.1 → 1.0.0)。影響は未確認。
