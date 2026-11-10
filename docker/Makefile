@@ -26,7 +26,7 @@ endef
 # ----------------------------------------
 .DEFAULT_GOAL := menu
 
-MENU_TARGETS := _exit docker-env docker-up docker-down docker-login docker-reset app-init
+MENU_TARGETS := _exit docker-env docker-up docker-down docker-login docker-reset app-init app-clean
 
 .PHONY: menu
 menu:
@@ -91,7 +91,8 @@ app-init:
 	$(call print_headline,${@})
 	@$(MAKE) app-env-setup
 	@$(MAKE) composer install
-	@$(MAKE) app-reset
+	@read -p "DB を初期化します(migrate:fresh)。実行しますか? [y/N]: " ans; \
+	if [ "$$ans" = "y" ]; then $(MAKE) app-reset; else echo "app-reset をスキップしました"; fi
 	@$(MAKE) app-clean
 
 .PHONY: app-env-setup
@@ -107,9 +108,7 @@ app-env-setup:
 .PHONY: app-clean
 app-clean:
 	$(call print_headline,${@})
-	chown -R 1000:1000 storage bootstrap/cache
-	chmod -R 755 storage bootstrap/cache
-	rm -rf storage/framework/cache/*
+	@docker-compose exec -T -u 0 -w /var/www/source $(NAME) sh -c 'chown -R 1000:1000 storage bootstrap/cache && chmod -R 755 storage bootstrap/cache && rm -rf storage/framework/cache/*'
 
 	@$(MAKE) artisan config:clear
 	@$(MAKE) artisan cache:clear

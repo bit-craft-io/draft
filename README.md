@@ -77,7 +77,7 @@ Makefile                       # （DDDとは関連なし）プロジェクト�
      　config.database.connections.{db}.sticky = true
 
 ## 使用技術
-- Laravel(PHP 8.4)
+- Laravel(PHP 8.5)
 - Docker(MySQL, Redis)
 - AWS(EC2, RDS, Valkey)
 

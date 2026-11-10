@@ -24,7 +24,6 @@ services:
       - ./container/job/php.ini:/usr/local/etc/php/php.ini:ro
       - ./container/job/.bash_aliases:/root/.bash_aliases:ro
       - ./container/job/.bashrc:/root/.bashrc:ro
-      - /sys/fs/cgroup:/sys/fs/cgroup:rw
       - ./container/job/system:/etc/systemd/system
       - ./container/job/entrypoint.sh:/entrypoint.sh
     working_dir: /var/www/source
