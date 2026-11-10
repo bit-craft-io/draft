@@ -11,7 +11,10 @@ PHP と Laravel の対応バージョンと、それに合わせるミドルウ�
   - 根拠: GHSA-w8hw-w9fx-j79w(CVE-2026-109618)、GHSA-6wmf-4rv5-p3rp(CVE-2026-109619)
   - php.net の ChangeLog(https://www.php.net/ChangeLog-8.php)で、PHP 8.5.12(2026-10-22)の「Core」の修正として、GHSA-w8hw-w9fx-j79w と GHSA-6wmf-4rv5-p3rp(Avoid state corruption via bailout)が記載されていることを確認した。
   - 同じ2件は、8.4.27、8.3.36、8.2.35 の ChangeLog にも記載されている(8.5 系以外にも、修正済みの版がある)。
-  - CVE 番号(CVE-2026-109618、CVE-2026-109619)との対応は、確認できていない(NVD は、このセッションから取得できなかった。php.net の ChangeLog に CVE 番号の記載はない)。
+  - NVD(https://services.nvd.nist.gov/rest/json/cves/2.0)で、次の対応を確認した(2026-11-10 に取得)。
+    - GHSA-w8hw-w9fx-j79w は CVE-2026-109618(CVSS 9.8 CRITICAL、公開 2026-10-21)。メモリ不足(OOM)時の `longjmp()` で、リクエストのメモリが未初期化のまま残り、リモートコード実行につながる。
+    - GHSA-6wmf-4rv5-p3rp は CVE-2026-109619(CVSS 8.1 HIGH、公開 2026-10-21)。グローバルな状態が、解放済みのリクエストのメモリを指し続ける。
+    - 影響範囲(NVD の構成情報): 8.2 系は 8.2.35 未満、8.3 系は 8.3.36 未満、8.4 系は 8.4.27 未満、8.5 系は 8.5.12 未満。
   - PHP 8.5 系を使う方針は、依頼者の指定による。
 - Laravel は **13 系**とする。
 - 「解決結果」は、`composer update --dry-run`(PHP 8.5.12 を指定)で依存を解決した結果であり、動作を確認した版ではない。
