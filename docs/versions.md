@@ -60,17 +60,36 @@ Laravel 13 自体の PHP 要件は 8.3 以上。8.5.12 以上という要件は�
 
 ## ミドルウェア(Docker)
 
-| 対象 | 現在の設定 | Laravel 13 の公式要件 | 判定 |
+| 対象 | 設定 | Laravel 13 の公式要件 | 判定 |
 |---|---|---|---|
-| MySQL | 8.0(master / slave) | MySQL 5.7 以上 | Laravel の要件は満たす。**MySQL 8.0 は、サポート期限(EOL)が 2026-04-30 で、終了済み**。後継の 8.4(LTS)の EOL は 2032-04-30 |
-| Redis | 7.0 | Redis サーバーの最低版の記載なし | Laravel の要件は不明。**Redis 7.0 は、EOL が 2024-07-29 で、終了済み**。7.2 は 2029-12-01、7.4 は 2029-12-01 まで |
+| MySQL | **8.4**(master / slave)。旧 8.0 | MySQL 5.7 以上 | Laravel の要件を満たす。8.4(LTS)の EOL は 2032-04-30。旧 8.0 は、EOL 2026-04-30 で終了済みだったため更新した |
+| Redis | **7.2**。旧 7.0 | Redis サーバーの最低版の記載なし | 7.2 の EOL は 2029-12-01。旧 7.0 は、EOL 2024-07-29 で終了済みだったため更新した |
 | nginx | タグ指定なし(`latest`) | 記載なし | 版が固定されていない |
-| Node(redoc 用) | 20-alpine | 記載なし | Laravel とは無関係(`docker/container/redoc/Dockerfile`)。**Node 20 は、EOL が 2026-04-30 で、終了済み**。22 は 2027-04-30、24 は 2028-04-30 まで |
+| Node(redoc 用) | **24-alpine**。旧 20-alpine | 記載なし(Laravel とは無関係) | 24 の EOL は 2028-04-30。旧 20 は、EOL 2026-04-30 で終了済みだったため更新した |
 
 出典:
 - https://endoflife.date/api/mysql.json、https://endoflife.date/api/redis.json、https://endoflife.date/api/nodejs.json (サポート期限。2026-11-10 に取得)
 - https://laravel.com/docs/13.x/database (サポートする DB と最低版)
 - https://laravel.com/docs/13.x/redis (クライアントの記載のみで、サーバー版の記載なし)
+
+### 実際のコンテナで確認した内容(2026-11-10)
+
+| 対象 | 確認 | 結果 |
+|---|---|---|
+| MySQL 8.4.13 + **旧設定のまま** | master を起動 | **失敗**: `unknown variable 'default_authentication_plugin=mysql_native_password'`(8.4 で削除されたオプション) |
+| MySQL 8.4.13 + `mysql_native_password = ON` | master と slave を起動 | master は起動。slave の初期化が**失敗**: `CHANGE MASTER TO` が構文エラー(8.4 で削除された構文) |
+| MySQL 8.4.13 + **見直した設定** | master と slave を起動し、レプリケーションを確認 | **成功**: `Replica_IO_Running: Yes`、`Replica_SQL_Running: Yes`、エラーなし。master に書いた行が slave に複製された |
+| MySQL 8.4.13(`caching_sha2_password`) | PHP の `pdo_mysql`(PHP 8.3.6)から接続 | **成功** |
+| Redis 7.2.17 | 起動、`PING`、`SET`・`GET` | 成功 |
+| redoc(Node 24) | `@redocly/cli` の対応する Node(npm の `engines`: `>=22.12.0 \|\| >=20.19.0 <21.0.0`) | 24 は条件を満たす。**コンテナ内でのビルド・実行は未確認**(このセッションのコンテナは、外部に接続できない) |
+
+### MySQL 8.4 で変えた点
+
+- `default_authentication_plugin`(`master.cnf`、`slave.cnf`)を削除した。8.4 で削除されたオプション。
+- `IDENTIFIED WITH mysql_native_password` を外し、既定の `caching_sha2_password` にした(`init_master.sql`の `guest`、`replica`)。8.4 では `mysql_native_password` が、既定で無効。
+- `CHANGE MASTER TO` / `START SLAVE` を、`CHANGE REPLICATION SOURCE TO` / `START REPLICA` に変えた(`init_slave.sql`)。`caching_sha2_password` のレプリケーション用ユーザーが、暗号化なしの接続で認証できるよう、`GET_SOURCE_PUBLIC_KEY=1` を付けた。
+- `guest` など、`mysql_native_password` を前提とする外部クライアント(古い DB クライアント)は、接続できない可能性がある(未確認)。
+- 既存のボリューム(8.0 のデータ)を、8.4 でそのまま起動できるかは、未確認。作り直す(`docker compose down -v`)ことを勧める。
 
 ### Redis クライアント
 
@@ -90,8 +109,12 @@ Laravel 13 自体の PHP 要件は 8.3 以上。8.5.12 以上という要件は�
 
 | 対象 | 現在 | 移行後 | 状態 |
 |---|---|---|---|
-| `composer.json` | `php` ^8.5.12、`laravel/framework` ^13.0、`laravel/tinker` ^3.0、`laravel/mcp` ^1.1、`phpunit/phpunit` ^12.0 | 同左 | **反映済み**(動作は未確認) |
-| `composer.lock` | Laravel 13.40.0 ほか、上の版で再生成(`composer update --no-install`) | 同左 | **反映済み**(インストール・テストは未実施) |
+| `composer.json` | `php` ^8.5.12、`laravel/framework` ^13.0、`laravel/tinker` ^3.0、`laravel/mcp` ^1.1、`phpunit/phpunit` ^12.0 | 同左 | **反映済み** |
+| `composer.lock` | Laravel 13.40.0 ほか、上の版で再生成 | 同左 | **反映済み** |
+| Laravel 13 での起動 | PHP 8.3.6 + Symfony 7.4 の scratch 環境で、`artisan route:list`(25 ルート。MCP・Sanctum を含む)が成功 | 同左 | 確認済み(PHP 8.5.12 は未確認)。既存の `ExampleTest` は、`/` が401で失敗する(例外描画の設計によるもので、Laravel 13 に起因しない) |
+| `docker/container/mysql/*/Dockerfile`、設定 | `mysql:8.4`(設定を見直し済み) | 同左 | **反映済み**(実際のコンテナで確認) |
+| `docker/docker-compose.yml` の Redis | `redis:7.2` | 同左 | **反映済み**(起動を確認) |
+| `docker/container/redoc/Dockerfile` | `node:24-alpine` | 同左 | **反映済み**(ビルドは未確認) |
 | `docker/container/php/Dockerfile` | `php:8.4-fpm` | `php:8.5.12-fpm` | 未更新 |
 | `docker/container/job/Dockerfile` | `php:8.4` | `php:8.5.12` | 未更新 |
 | `README.md` の使用技術 | Laravel(PHP 8.4) | PHP 8.5 | 未更新 |
