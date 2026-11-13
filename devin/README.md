@@ -27,10 +27,20 @@ Devin に設定しているルール・スキル・スクリプトの、元デ�
 | `rules/rule-base.md`、`rules/rule-terraform.md` | 写さない(`CLAUDE.md` の「共通の方針」に同じ内容がある) |
 | `rules/rule-pr-close.md`、`rules/rule-token-session.md` | 写さない(Devin 専用) |
 
-## Devin が作った PR のレビュー
+## PR で Devin を呼ぶ
 
-- Claude Code で、`/git pr-review <レベル> <対象> --mention @Devin` を使う。総括の先頭に `@Devin` が付き、全指摘が1回で渡る(組織設定「応答に@Devinを必須にする」が ON のとき、`@Devin` を含むコメントにだけ Devin が応答する)。
-- `@Devin` は、Slack のメッセージには書かない(Devin が起きて、枠を使う)。
+Devin が作った PR(追跡中の PR)では、コメントの先頭に `@devin-ai-integration`、`/devin `、`Devin` のいずれかを書くと、Devin が応答する。
+
+| 書き方 | 結果 |
+|---|---|
+| `@devin-ai-integration` | 応答する |
+| `/devin ` | 応答する |
+| `Devin` | 応答する |
+
+注意:
+- `@Devin`、`@devin`、`@devin-ai` は、GitHub の別の個人ユーザーに通知が行くので、PR に書かない。
+- PR と関係のない質問は、Devin が答えない。Slack などの新しいセッションで聞く。
+- Devin が追跡している PR のコメントは、メンションなしでも受信され、トークンを消費しうる。指摘は 1 回のレビューにまとめる。止めるときは、PR の「Disable automatic comment, CI, and merge conflict monitoring」にチェックを入れるか、PR が閉じたあとにセッションをアーカイブする。
 
 ## 反映の記録
 
@@ -39,6 +49,7 @@ Devin に設定しているルール・スキル・スクリプトの、元デ�
 | 全ファイル(初回の取り込み) | 2026-11-06(Devin の設定から写した) |
 | `skills/issue-to-pr/SKILL.md`(手順 1・2: モデルの確認) | 2026-11-09 |
 | `skills/issue-to-pr/SKILL.md`(手順 1・2: モデルの確認を外した) | 2026-11-09 |
+| README の「PR で Devin を呼ぶ」(`@Devin` を、GitHub の別の個人ユーザーに当たらない書き方に改めた) | 2026-11-13 |
 
 ## Devin の設定画面
 
